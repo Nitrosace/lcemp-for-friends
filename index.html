@@ -8,7 +8,6 @@
     <meta property="og:title" content="LCEMP - Minecraft LCE Source Fork" />
     <meta property="og:description" content="A fork of Minecraft Legacy Console Edition with LAN multiplayer support and keyboard/mouse compatibility." />
     <meta property="og:image" content="images/186_MenuTitle.png" />
-    <meta property="og:url" content="https://c0rbin.fun" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     
@@ -57,11 +56,37 @@
             text-shadow: 2px 2px 0px #000000;
         }
 
+        .title-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 40px;
+            z-index: 10;
+        }
+
         .thebigcooltitlepic {
             width: 100%;
             max-width: 600px;
             image-rendering: pixelated;
-            margin-bottom: 40px;
+            display: block;
+        }
+
+        .splash-text {
+            position: absolute;
+            bottom: 5px;
+            right: -20px;
+            color: #FFFF00;
+            font-size: 20px;
+            text-shadow: 2px 2px 0px #3f3f00;
+            transform: rotate(-20deg);
+            white-space: nowrap;
+            animation: splashPulse 0.5s infinite alternate ease-in-out;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        @keyframes splashPulse {
+            from { transform: rotate(-20deg) scale(1); }
+            to { transform: rotate(-20deg) scale(1.1); }
         }
 
         .dirtpanelbox {
@@ -171,7 +196,6 @@
             color: #ffffa0;
         }
 
-        /* Version Selection Styling */
         .version-selection-container {
             margin-top: 20px;
             text-align: center;
@@ -234,7 +258,7 @@
             top: 0; left: 0;
             width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.85);
-            z-index: 100;
+            z-index: 200;
             justify-content: center;
             align-items: center;
             font-family: 'Mojangles', sans-serif;
@@ -277,6 +301,7 @@
 
         @media (max-width: 600px) {
             .dirtpanelbox { width: 95%; }
+            .splash-text { right: 10px; font-size: 16px; }
         }
     </style>
 </head>
@@ -285,7 +310,10 @@
     <div class="darkenscreenlayer"></div>
 
     <div class="mainpagewrapper">
-        <img src="images/186_MenuTitle.png" class="thebigcooltitlepic" alt="LCEMP title">
+        <div class="title-container">
+            <img src="images/186_MenuTitle.png" class="thebigcooltitlepic" alt="LCEMP title">
+            <div class="splash-text" id="randomSplash">Now with multiplayer!</div>
+        </div>
 
         <div class="dirtpanelbox">
             <button class="gearbuttoninthecorner makeanoiseonhover" id="opengesettingsbutton">
@@ -359,12 +387,12 @@
                 <p>If you do not specify a name, the game will use your computer's username automatically.</p>
 
                 <h3>How to Use Launch Arguments (Windows)</h3>
-                <ul>
+                <ol>
                     <li>Right-click the <code>Minecraft.Client.exe</code></li>
                     <li>Click <b>Create Shortcut</b></li>
                     <li>Right-click the shortcut and open <b>Properties</b></li>
                     <li>Add the launch arguments at the end of the <b>Target</b> field</li>
-                </ul>
+                </ol>
                 <p>Example: <code>Minecraft.Client.exe -name Simon -ip 123.123.123.123</code></p>
                 <img src="images/Screenshot.png" alt="How to add launch arguments" class="screenshot-placeholder">
             </div>
@@ -430,10 +458,37 @@
     </div>
 
     <script>
+        /* Splash Text Logic */
+        const splashTexts = [
+            "Now with multiplayer!", "Not affiliated with Mojang!", "100% more LAN!", "https://discord.gg/lcemp",
+            "Also try Console Edition!", "Check the changelogs!", "Removed Herobrine!", "Made with love! <3",
+            "Splitscreen is coming!", "Works on my machine!", "Probably bug free!", "Definitely not spaghetti code!",
+            "Try pressing Alt+F4!", "LAN party ready!", "Up to 8 friends!", "Or 0 if nobody joins :(",
+            "Keyboard AND mouse!", "Blocks were harmed in the making!", "Certified gamer software!",
+            "Now 12% more stable!", "Do not eat the source code!", "Trust me bro it works!",
+            "Runs better than expected!", "Netcode moment!", "Hello world!", "Compiles sometimes!",
+            "Press buttons responsibly!", "Friendship simulator!", "Touch grass later!", "Works with Radmin!",
+            "Hamachi survivors welcome!", "Bug? what bug?", "Feature, not bug!", "Probably fine!",
+            "Send help!", "Why are you reading this?", "Open source soon™", "End dimension soon™",
+            "Splitscreen enjoyers rise!", "Retro vibes!", "Console edition forever!", "Legacy lives on!",
+            "LAN > internet", "Low ping gaming!", "Made out of boredom!", "Built different!",
+            "Powered by C++!", "Works better than expected!", "Your PC can handle it!", "Try breaking a block!",
+            "Place responsibly!", "Don't grief the host!", "Kick system included!", "Bring snacks!",
+            "Friends recommended!", "Multiplayer chaos!", "Classic Minecraft vibes!", "Cube game enjoyer!",
+            "Stone texture supremacy!", "Blocky but beautiful!", "Runs on hope!", "Probably secure!",
+            "No microtransactions!", "Free as in free!", "Pixel perfection!", "Trust the process!",
+            "Debugging is fun!", "Just one more block!", "Just one more update!", "Almost finished!",
+            "Totally stable build!", "Netcode wizardry!", "LAN magic!", "Open the settings!",
+            "Customize your tab!", "Now with extra pixels!", "Retro gaming energy!", "Made for the homies!",
+            "LCEMP gang!", ":3", "<3"
+        ];
+        document.getElementById('randomSplash').innerText = splashTexts[Math.floor(Math.random() * splashTexts.length)];
+
         /* Audio Assets */
         const hoverysoundobj = new Audio('focus.ogg');
         const clickysoundobj = new Audio('press.ogg');
         const backysoundobj = new Audio('back.ogg');
+        const chestsoundobj = new Audio('music/chest.ogg'); // Added chest sound
 
         const bringupthesettingsbtn = document.getElementById('opengesettingsbutton');
         const thatbigdarkscreen = document.getElementById('thebigsettingsmenu');
@@ -472,6 +527,15 @@
         document.addEventListener("click", () => {
             if(!backgroundmusic.src) playrandomsong();
         }, { once: true });
+
+        /* Global Link Click Sound (Chest opening) */
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a');
+            if (link) {
+                chestsoundobj.currentTime = 0;
+                chestsoundobj.play().catch(() => {});
+            }
+        });
 
         /* UI Event Listeners */
         document.querySelectorAll('.makeanoiseonhover').forEach(el => {
