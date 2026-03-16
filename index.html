@@ -79,7 +79,7 @@
             text-shadow: 2px 2px 0px #3f3f00;
             transform: rotate(-20deg);
             white-space: nowrap;
-            animation: splashPulse 0.5s infinite alternate ease-in-out;
+            animation: splashPulse 0.4s infinite alternate ease-in-out;
             pointer-events: none;
             z-index: 100;
         }
@@ -338,7 +338,7 @@
                 <li>Kick system (Up to 8 players, modifiable in source)</li>
                 <li>Keyboard and mouse support</li>
                 <li>Gamma fix & Fullscreen support</li>
-                <li>The source code will be open-sourced on GitHub, and pull requests will be accepted.</li>
+                <li>The source code is available on the GitHub repositories.</li>
                 <li>To play with others, it is recommended to use Hamachi or Radmin VPN.</li>
             </ul>
 
@@ -346,15 +346,17 @@
                 "If you want to reuse the multiplayer code in another project, please give credit, as it took a long time to develop." - notpies
             </div>
 
-            <a href="https://github.com/LCEMP/LCEMP" class="mcstylebutton makeanoiseonhover" target="_blank">View on GitHub</a>
+            <a href="https://github.com/LCEMP/LCEMP-Server" class="mcstylebutton makeanoiseonhover" target="_blank">Dedicated Server Source (GitHub)</a>
+            <a href="https://github.com/LCEMP/LCEMP" class="mcstylebutton makeanoiseonhover" target="_blank">Client Source (GitHub)</a>
             
             <div class="version-selection-container">
                 <select id="versionSelect" class="mc-dropdown makeanoiseonhover">
-                    <option value="https://www.mediafire.com/file/wujwak4nsb6ln0r/LCEMP_v1.0.3.zip/file">LCEMP 1.0.3 (Latest)</option>
+                    <option value="https://www.mediafire.com/file/pwvgxfh49amhk69/LCEMP_v1.0.4.zip/file">LCEMP 1.0.4 (Latest)</option>
+                    <option value="https://www.mediafire.com/file/wujwak4nsb6ln0r/LCEMP_v1.0.3.zip/file">LCEMP 1.0.3</option>
                     <option value="https://www.mediafire.com/file/amnh5srbtzgxats/LCEMP_1.0.2.zip/file">LCEMP 1.0.2</option>
                     <option value="https://www.mediafire.com/file/oe4wlaodw7v8k3a/LCEMP1.0.1.zip/file">LCEMP 1.0.1 (Broken Link)</option>
                 </select>
-                <a href="https://www.mediafire.com/file/wujwak4nsb6ln0r/LCEMP_v1.0.3.zip/file" id="dynamicDownloadBtn" class="mcstylebutton makeanoiseonhover" target="_blank">Download Selected Version</a>
+                <a href="https://www.mediafire.com/file/pwvgxfh49amhk69/LCEMP_v1.0.4.zip/file" id="dynamicDownloadBtn" class="mcstylebutton makeanoiseonhover" target="_blank">Download Selected Version</a>
             </div>
 
             <a href="https://www.mediafire.com/file/7lt83l2djjqvarv/DLC.zip/file" class="mcstylebutton makeanoiseonhover" target="_blank" style="margin-top: 30px;">DLC's Download</a>
@@ -414,6 +416,20 @@
 
             <div class="section-title">Changelogs</div>
             <div class="updates-container">
+                <div class="changelog-entry">
+                    <b class="version-tag">LCEMP 1.0.4</b>
+                    <ul>
+                        <li>huge net code improvements</li>
+                        <li>keybinds are now configurable (a file should be created on root game folder)</li>
+                        <li>voice chat support (dedicated server only, you can configure on the keybinds ini if using active mode or push to talk along with its keybind, it uses the default microphone)</li>
+                        <li>major chunk generation fixes</li>
+                        <li>performance improvements</li>
+                        <li>dedicated server packet validation (prevents craft anything, debug menu cheats on dedicated servers)</li>
+                        <li>misc bug fixes</li>
+                    </ul>
+                    <a href="https://www.mediafire.com/file/pwvgxfh49amhk69/LCEMP_v1.0.4.zip/file" style="color: #55ff55;">Download 1.0.4</a>
+                </div>
+
                 <div class="changelog-entry">
                     <b class="version-tag">LCEMP 1.0.3</b>
                     <ul>
