@@ -79,7 +79,7 @@
             text-shadow: 2px 2px 0px #3f3f00;
             transform: rotate(-20deg);
             white-space: nowrap;
-            animation: splashPulse 0.4s infinite alternate ease-in-out;
+            animation: splashPulse 0.3s infinite alternate ease-in-out;
             pointer-events: none;
             z-index: 100;
         }
@@ -305,6 +305,28 @@
             .dirtpanelbox { width: 95%; }
             .splash-text { right: 10px; font-size: 16px; }
         }
+        /* TV Scanline Overlay */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+
+    background:
+        linear-gradient(
+            rgba(18, 16, 16, 0) 50%,
+            rgba(0, 0, 0, 0.1) 50%
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 0, 0, 0.03),
+            rgba(0, 255, 0, 0.01),
+            rgba(0, 0, 255, 0.03)
+        );
+
+    background-size: 100% 4px, 3px 100%;
+    z-index: 9999;
+    pointer-events: none;
+}
     </style>
 </head>
 <body>
@@ -511,9 +533,56 @@
             "Debugging is fun!", "Just one more block!", "Just one more update!", "Almost finished!",
             "Totally stable build!", "Netcode wizardry!", "LAN magic!", "Open the settings!",
             "Customize your tab!", "Now with extra pixels!", "Retro gaming energy!", "Made for the homies!",
-            "LCEMP gang!", ":3", "<3"
+            "LCEMP gang!", ":3", "<3", "Probably won't get a DMCA!"
         ];
-        document.getElementById('randomSplash').innerText = splashTexts[Math.floor(Math.random() * splashTexts.length)];
+        const splashElement = document.getElementById('randomSplash');
+
+let currentText = "";
+let isAnimating = false;
+
+function getRandomSplash() {
+    return splashTexts[Math.floor(Math.random() * splashTexts.length)];
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function typeText(text) {
+    isAnimating = true;
+    splashElement.innerText = "";
+    currentText = "";
+
+    for (let i = 0; i < text.length; i++) {
+        currentText += text[i];
+        splashElement.innerText = currentText;
+        await sleep(100);
+    }
+}
+
+async function deleteText() {
+    for (let i = currentText.length; i > 0; i--) {
+        currentText = currentText.slice(0, -1);
+        splashElement.innerText = currentText;
+        await sleep(90); 
+    }
+}
+
+async function splashLoop() {
+    while (true) {
+        const newText = getRandomSplash();
+
+        await typeText(newText);
+
+        await sleep(10000); 
+
+        await deleteText();
+
+        await sleep(300); 
+    }
+}
+
+splashLoop();
 
         /* Audio Assets */
         const hoverysoundobj = new Audio('focus.ogg');
