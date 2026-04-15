@@ -1,668 +1,668 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCEMP - Legacy Console Edition Multiplayer</title>
-    
-    <meta property="og:title" content="LCEMP - Minecraft LCE Source Fork" />
-    <meta property="og:description" content="A fork of Minecraft Legacy Console Edition with LAN multiplayer support and keyboard/mouse compatibility." />
-    <meta property="og:image" content="images/186_MenuTitle.png" />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    
-    <link id="thetopbariconthingy" rel="icon" type="image/png" href="images/settings.png">
-    
-    <style>
-        @font-face {
-            font-family: 'Mojangles';
-            src: url('Mojangles.ttf') format('truetype');
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LCEMP - Legacy Console Edition Multiplayer</title>
 
-        html, body {
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            background-color: #000000;
-            background-image: url('images/bg.png');
-            background-repeat: repeat;
-            background-size: 64px;
-            image-rendering: pixelated;
-        }
+<meta property="og:title" content="LCEMP - Minecraft LCE Source Fork" />
+<meta property="og:description" content="A fork of Minecraft Legacy Console Edition with LAN multiplayer support and keyboard/mouse compatibility." />
+<meta property="og:image" content="images/186_MenuTitle.png" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
 
-        * {
-            box-sizing: border-box;
-            cursor: url('images/download.png') 0 0, auto !important;
-            user-select: none;
-        }
+<link id="thetopbariconthingy" rel="icon" type="image/png" href="images/settings.png">
 
-        .darkenscreenlayer {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 0;
-        }
-
-        .mainpagewrapper {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 0;
-            font-family: 'Mojangles', sans-serif;
-            color: #ffffff;
-            text-shadow: 2px 2px 0px #000000;
-        }
-
-        .title-container {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 40px;
-            z-index: 10;
-        }
-
-        .thebigcooltitlepic {
-            width: 100%;
-            max-width: 600px;
-            image-rendering: pixelated;
-            display: block;
-        }
-
-        .splash-text {
-            position: absolute;
-            bottom: 5px;
-            right: -20px;
-            color: #FFFF00;
-            font-size: 20px;
-            text-shadow: 2px 2px 0px #3f3f00;
-            transform: rotate(-20deg);
-            white-space: nowrap;
-            animation: splashPulse 0.3s infinite alternate ease-in-out;
-            pointer-events: none;
-            z-index: 100;
-        }
-
-        @keyframes splashPulse {
-            from { transform: rotate(-20deg) scale(1); }
-            to { transform: rotate(-20deg) scale(1.1); }
-        }
-
-        .dirtpanelbox {
-            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/stone.jpg');
-            background-repeat: repeat;
-            background-size: 128px;
-            image-rendering: pixelated;
-            border: 2px solid #000000;
-            box-shadow: inset 2px 2px 0px #707070, inset -2px -2px 0px #303030, 0px 15px 35px rgba(0,0,0,0.8);
-            width: 850px;
-            max-width: 95%;
-            padding: 30px;
-            position: relative;
-            margin-bottom: 40px;
-        }
-
-        .gearbuttoninthecorner {
-            position: absolute;
-            top: -70px;
-            right: 0;
-            background: transparent;
-            border: none;
-            padding: 5px;
-            transition: transform 0.1s;
-        }
-
-        .gearbuttoninthecorner:hover img {
-            outline: 2px solid #ffffff;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .gearbuttoninthecorner:active { transform: scale(0.9); }
-
-        .gearbuttoninthecorner img {
-            width: 48px;
-            height: 48px;
-            image-rendering: pixelated;
-        }
-
-        .maindescriptiontext {
-            font-size: 18px;
-            line-height: 1.6;
-            color: #e0e0e0;
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .section-title {
-            color: #ffff55;
-            text-align: center;
-            font-size: 24px;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            text-decoration: underline;
-        }
-
-        .feature-list {
-            list-style: none;
-            padding: 0;
-            text-align: left;
-            display: inline-block;
-            margin: 0 auto 20px auto;
-            width: 100%;
-        }
-
-        .feature-list li {
-            margin-bottom: 8px;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .feature-list li::before {
-            content: ">";
-            position: absolute;
-            left: 0;
-            color: #55ff55;
-        }
-
-        .redwarningtext {
-            font-size: 20px;
-            color: #ff5555;
-            text-align: center;
-            margin: 20px 0;
-            border: 2px dashed #ff5555;
-            padding: 10px;
-        }
-
-        .mcstylebutton {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background-color: #616161;
-            border: 2px solid #000000;
-            box-shadow: inset 2px 2px 0px #949494, inset -2px -2px 0px #2a2a2a;
-            color: #ffffff;
-            font-family: 'Mojangles', sans-serif;
-            font-size: 20px;
-            text-align: center;
-            text-shadow: 2px 2px 0px #000000;
-            margin-top: 15px;
-            text-decoration: none;
-            image-rendering: pixelated;
-        }
-
-        .mcstylebutton:hover {
-            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMQAAAAPCAMAAACMV5AuAAAAVFBMVEVtd7ZteLZverdwerdwe7hxfLhyfbl0frl1f7p2gLt4grx6hLx7hb18hr5+iL+AisCBi8GCjMGEjsKGkMOHkcSIksSKk8WLlMWLlcaMlcaNlsePmMdwBHmVAAAEjElEQVRIx1WW27YbKw5F3Ul2GYTWFAJX+pyd///PfgDsTg0/mSqQ1k08AEAeDkAA7kXyDAeyu2QCWREgCGSvAAbIE/D9U2m8Ji4Drw0CEhP7EMiqBFxmDMBEkHvd5AziDsjoCKQXddUl1nuZgMZrf0PMdj1kgNY+Ay+CJPg8kj1rR3X/GS9kxaoJVFaB6QkxIX5TBX65mpAZGQH3HaoCFMj6/GxuYgDyTsyup1hfxwxVN+F08ANGANyf8jqAPaBpranJvhxV+VV08JGPVScmcL8W4EIuAFWFHMZrUkUfNC3WtIsEaFogMWJRl839MES61w1cjMUsI1fb7GKaoENMOdFNykzXPz2mlwekkXjV4ioO9b15rZWZd4AaCL9cxdSutl8buIOUkd8JTgAy01IKoFoFPhAZr65SbDHgxFIGKi5IpLaKdlafAHxaVWDt2SSZ24LQhEx6aLGyj7RtELDLiA7EiD72ehBiQJo5oPq1nOQMYGAIYoY2AwIrImaA+25P8vZRa0KgqrjnQIaACiom/1G9Sla3GUHVLl/mMl/mxeUPGT0T5seAeeAQtF9WV2F7cX4niJ4DYmBd12oh7jymyRkBuq6M81mQuExHVv313beo9VH3ojfM2zZ8AkTG8X7EeDs6OZw+mrY7E5l/gqQJmZx+YySQAi1/dqQZy0as4FL1d7nrcfd1kjWTX1ZIYESTUCnuPZE7+anrqcxlz3diUX2HowHCf15S3AvxrnhRxeMwtQACGYGKZ7wGjNl7vH73MHdP8s/vSXM0FiRqMnPowfbjRsfe6n7nZ/FGIyfgF6+A/t1XTrcWB3Q42AxkMOfMfuJotRPgqGqFMfB8KO6eN+BEpO8F2eLZ18YO0GUdmEDcXMcNey+XuOfvP5P35guSVxAzWRYUpIoSuZiJrJ/p4zPouw0pwX+6XwpIcyNWEcJ/uf5Svuyx+ncTfhmotEhIBPe/8f961F/jI5aQfSs3WFOwChnZZxPk+HQjZu/WBuDFVwobZnoLISBOdkmNLFPE9iadiImsgTcdTDKA8dj1qBT518Xcg6+6L0Yl/nqCLeH+b46InkCSETTBzEQBRoPEwS9lKVUkpEx426M3oIMHYQLhK/B6jHvgXw6if4+YM4mlJdWDpLw4MhHgjwBZgIt+ZJdAVENOEkiv6mY4yy5nFPjnQmGfGVy0IqP+cmbsWF7Se/rT+5ZBzHPdKfajHW2ouWldPJaoTDJ3GUYTNMV/IyaiPYqQuX0VPXK+ra3Mc8c5Wlkp4D/e5S5htjXU3HnPPJsBXraRM/rSpOMX99zMoVradRl9AMxJdVPIYgf8Rhu0DvLM739A5rmjJ51QcW9SFXjcvR85oYOhSKTsd65pqdKWIV59ZO/7kKTDJLbvYw9XVRIyTXKJdfm4rOjE18yT8IHM/euZa0Z0fLvBSIh7h925QLoXR80WNfnqOHHP7Qk5aj+dTLX4E3hhIkafoGd15/IDT/lPTVSVr233dy6OkJtiLm0yBu+byeE2Yc59pVrDdKyPjxgD4h6r6vcFwpYNHMxVBaE2ApmfyTTjf5jQnWRymG7iAAAAAElFTkSuQmCC);
-            border-color: #BDC6FF #59639A #59639A #BDC6FF;
-            color: #ffffa0;
-            box-shadow: none;
-        }
-
-        .version-selection-container {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .mc-dropdown {
-            width: 100%;
-            background-color: #000000;
-            border: 2px solid #a0a0a0;
-            color: #ffffff;
-            font-family: 'Mojangles', sans-serif;
-            font-size: 18px;
-            padding: 10px;
-            outline: none;
-            margin-bottom: 5px;
-        }
-
-        .setup-guide-content {
-            background: rgba(0,0,0,0.3);
-            padding: 20px;
-            border: 1px solid #555;
-            margin-top: 10px;
-        }
-
-        .setup-guide-content h3 { color: #55ff55; margin-top: 15px; }
-        .setup-guide-content code { background: #222; padding: 2px 5px; color: #ffaa00; }
-
-        .updates-container {
-            text-align: left;
-            background: rgba(0,0,0,0.4);
-            padding: 15px;
-            border: 2px solid #404040;
-            margin-top: 20px;
-            font-size: 16px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .changelog-entry {
-            margin-bottom: 20px;
-            border-bottom: 1px solid #555;
-            padding-bottom: 10px;
-        }
-
-        .version-tag { color: #55ffff; }
-
-        .disclaimer-box {
-            background-color: rgba(255, 255, 85, 0.1);
-            border: 1px solid #ffff55;
-            padding: 15px;
-            font-size: 14px;
-            margin-bottom: 25px;
-            color: #ffffaa;
-            text-align: center;
-        }
-
-        .blackscreenoverlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            z-index: 200;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Mojangles', sans-serif;
-            color: #ffffff;
-            text-shadow: 2px 2px 0px #000000;
-        }
-
-        .settingsmenuwindow {
-            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/stone.jpg');
-            background-repeat: repeat;
-            background-size: 128px;
-            image-rendering: pixelated;
-            border: 2px solid #000000;
-            box-shadow: inset 2px 2px 0px #707070, inset -2px -2px 0px #303030, 0px 15px 35px rgba(0,0,0,0.8);
-            width: 450px;
-            padding: 25px;
-        }
-
-        .mcinputbox {
-            width: 100%;
-            background-color: #000000;
-            border: 2px solid #a0a0a0;
-            box-shadow: inset 2px 2px 0px #303030, inset -2px -2px 0px #ffffff;
-            color: #ffffff;
-            font-family: 'Mojangles', sans-serif;
-            font-size: 18px;
-            padding: 10px;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 0px #000000;
-            outline: none;
-        }
-
-        .screenshot-placeholder {
-            width: 100%;
-            max-width: 500px;
-            border: 2px solid #ffffff;
-            margin: 15px 0;
-            display: block;
-        }
-
-        @media (max-width: 600px) {
-            .dirtpanelbox { width: 95%; }
-            .splash-text { right: 10px; font-size: 16px; }
-        }
-        /* TV Scanline Overlay */
-body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-
-    background:
-        linear-gradient(
-            rgba(18, 16, 16, 0) 50%,
-            rgba(0, 0, 0, 0.1) 50%
-        ),
-        linear-gradient(
-            90deg,
-            rgba(255, 0, 0, 0.03),
-            rgba(0, 255, 0, 0.01),
-            rgba(0, 0, 255, 0.03)
-        );
-
-    background-size: 100% 4px, 3px 100%;
-    z-index: 9999;
-    pointer-events: none;
+<style>
+@font-face {
+font-family: 'Mojangles';
+src: url('Mojangles.ttf') format('truetype');
 }
-    </style>
+
+html, body {
+margin: 0;
+padding: 0;
+min-height: 100vh;
+background-color: #000000;
+background-image: url('images/bg.png');
+background-repeat: repeat;
+background-size: 64px;
+image-rendering: pixelated;
+}
+
+* {
+box-sizing: border-box;
+cursor: url('images/download.png') 0 0, auto !important;
+user-select: none;
+}
+
+.darkenscreenlayer {
+position: fixed;
+top: 0; left: 0;
+width: 100%; height: 100%;
+background-color: rgba(0, 0, 0, 0.5);
+z-index: 0;
+}
+
+.mainpagewrapper {
+position: relative;
+z-index: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 40px 0;
+font-family: 'Mojangles', sans-serif;
+color: #ffffff;
+text-shadow: 2px 2px 0px #000000;
+}
+
+.title-container {
+position: relative;
+display: inline-block;
+margin-bottom: 40px;
+z-index: 10;
+}
+
+.thebigcooltitlepic {
+width: 100%;
+max-width: 600px;
+image-rendering: pixelated;
+display: block;
+}
+
+.splash-text {
+position: absolute;
+bottom: 5px;
+right: -20px;
+color: #FFFF00;
+font-size: 20px;
+text-shadow: 2px 2px 0px #3f3f00;
+transform: rotate(-20deg);
+white-space: nowrap;
+animation: splashPulse 0.3s infinite alternate ease-in-out;
+pointer-events: none;
+z-index: 100;
+}
+
+@keyframes splashPulse {
+from { transform: rotate(-20deg) scale(1); }
+to { transform: rotate(-20deg) scale(1.1); }
+}
+
+.dirtpanelbox {
+background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/stone.jpg');
+background-repeat: repeat;
+background-size: 128px;
+image-rendering: pixelated;
+border: 2px solid #000000;
+box-shadow: inset 2px 2px 0px #707070, inset -2px -2px 0px #303030, 0px 15px 35px rgba(0,0,0,0.8);
+width: 850px;
+max-width: 95%;
+padding: 30px;
+position: relative;
+margin-bottom: 40px;
+}
+
+.gearbuttoninthecorner {
+position: absolute;
+top: -70px;
+right: 0;
+background: transparent;
+border: none;
+padding: 5px;
+transition: transform 0.1s;
+}
+
+.gearbuttoninthecorner:hover img {
+outline: 2px solid #ffffff;
+background-color: rgba(255, 255, 255, 0.1);
+}
+
+.gearbuttoninthecorner:active { transform: scale(0.9); }
+
+.gearbuttoninthecorner img {
+width: 48px;
+height: 48px;
+image-rendering: pixelated;
+}
+
+.maindescriptiontext {
+font-size: 18px;
+line-height: 1.6;
+color: #e0e0e0;
+text-align: center;
+margin-bottom: 25px;
+}
+
+.section-title {
+color: #ffff55;
+text-align: center;
+font-size: 24px;
+margin-top: 20px;
+margin-bottom: 10px;
+text-decoration: underline;
+}
+
+.feature-list {
+list-style: none;
+padding: 0;
+text-align: left;
+display: inline-block;
+margin: 0 auto 20px auto;
+width: 100%;
+}
+
+.feature-list li {
+margin-bottom: 8px;
+padding-left: 20px;
+position: relative;
+}
+
+.feature-list li::before {
+content: ">";
+position: absolute;
+left: 0;
+color: #55ff55;
+}
+
+.redwarningtext {
+font-size: 20px;
+color: #ff5555;
+text-align: center;
+margin: 20px 0;
+border: 2px dashed #ff5555;
+padding: 10px;
+}
+
+.mcstylebutton {
+display: block;
+width: 100%;
+padding: 12px;
+background-color: #616161;
+border: 2px solid #000000;
+box-shadow: inset 2px 2px 0px #949494, inset -2px -2px 0px #2a2a2a;
+color: #ffffff;
+font-family: 'Mojangles', sans-serif;
+font-size: 20px;
+text-align: center;
+text-shadow: 2px 2px 0px #000000;
+margin-top: 15px;
+text-decoration: none;
+image-rendering: pixelated;
+}
+
+.mcstylebutton:hover {
+background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMQAAAAPCAMAAACMV5AuAAAAVFBMVEVtd7ZteLZverdwerdwe7hxfLhyfbl0frl1f7p2gLt4grx6hLx7hb18hr5+iL+AisCBi8GCjMGEjsKGkMOHkcSIksSKk8WLlMWLlcaMlcaNlsePmMdwBHmVAAAEjElEQVRIx1WW27YbKw5F3Ul2GYTWFAJX+pyd///PfgDsTg0/mSqQ1k08AEAeDkAA7kXyDAeyu2QCWREgCGSvAAbIE/D9U2m8Ji4Drw0CEhP7EMiqBFxmDMBEkHvd5AziDsjoCKQXddUl1nuZgMZrf0PMdj1kgNY+Ay+CJPg8kj1rR3X/GS9kxaoJVFaB6QkxIX5TBX65mpAZGQH3HaoCFMj6/GxuYgDyTsyup1hfxwxVN+F08ANGANyf8jqAPaBpranJvhxV+VV08JGPVScmcL8W4EIuAFWFHMZrUkUfNC3WtIsEaFogMWJRl839MES61w1cjMUsI1fb7GKaoENMOdFNykzXPz2mlwekkXjV4ioO9b15rZWZd4AaCL9cxdSutl8buIOUkd8JTgAy01IKoFoFPhAZr65SbDHgxFIGKi5IpLaKdlafAHxaVWDt2SSZ24LQhEx6aLGyj7RtELDLiA7EiD72ehBiQJo5oPq1nOQMYGAIYoY2AwIrImaA+25P8vZRa0KgqrjnQIaACiom/1G9Sla3GUHVLl/mMl/mxeUPGT0T5seAeeAQtF9WV2F7cX4niJ4DYmBd12oh7jymyRkBuq6M81mQuExHVv313beo9VH3ojfM2zZ8AkTG8X7EeDs6OZw+mrY7E5l/gqQJmZx+YySQAi1/dqQZy0as4FL1d7nrcfd1kjWTX1ZIYESTUCnuPZE7+anrqcxlz3diUX2HowHCf15S3AvxrnhRxeMwtQACGYGKZ7wGjNl7vH73MHdP8s/vSXM0FiRqMnPowfbjRsfe6n7nZ/FGIyfgF6+A/t1XTrcWB3Q42AxkMOfMfuJotRPgqGqFMfB8KO6eN+BEpO8F2eLZ18YO0GUdmEDcXMcNey+XuOfvP5P35guSVxAzWRYUpIoSuZiJrJ/p4zPouw0pwX+6XwpIcyNWEcJ/uf5Svuyx+ncTfhmotEhIBPe/8f961F/jI5aQfSs3WFOwChnZZxPk+HQjZu/WBuDFVwobZnoLISBOdkmNLFPE9iadiImsgTcdTDKA8dj1qBT518Xcg6+6L0Yl/nqCLeH+b46InkCSETTBzEQBRoPEwS9lKVUkpEx426M3oIMHYQLhK/B6jHvgXw6if4+YM4mlJdWDpLw4MhHgjwBZgIt+ZJdAVENOEkiv6mY4yy5nFPjnQmGfGVy0IqP+cmbsWF7Se/rT+5ZBzHPdKfajHW2ouWldPJaoTDJ3GUYTNMV/IyaiPYqQuX0VPXK+ra3Mc8c5Wlkp4D/e5S5htjXU3HnPPJsBXraRM/rSpOMX99zMoVradRl9AMxJdVPIYgf8Rhu0DvLM739A5rmjJ51QcW9SFXjcvR85oYOhSKTsd65pqdKWIV59ZO/7kKTDJLbvYw9XVRIyTXKJdfm4rOjE18yT8IHM/euZa0Z0fLvBSIh7h925QLoXR80WNfnqOHHP7Qk5aj+dTLX4E3hhIkafoGd15/IDT/lPTVSVr233dy6OkJtiLm0yBu+byeE2Yc59pVrDdKyPjxgD4h6r6vcFwpYNHMxVBaE2ApmfyTTjf5jQnWRymG7iAAAAAElFTkSuQmCC);
+border-color: #BDC6FF #59639A #59639A #BDC6FF;
+color: #ffffa0;
+box-shadow: none;
+}
+
+.version-selection-container {
+margin-top: 20px;
+text-align: center;
+}
+
+.mc-dropdown {
+width: 100%;
+background-color: #000000;
+border: 2px solid #a0a0a0;
+color: #ffffff;
+font-family: 'Mojangles', sans-serif;
+font-size: 18px;
+padding: 10px;
+outline: none;
+margin-bottom: 5px;
+}
+
+.setup-guide-content {
+background: rgba(0,0,0,0.3);
+padding: 20px;
+border: 1px solid #555;
+margin-top: 10px;
+}
+
+.setup-guide-content h3 { color: #55ff55; margin-top: 15px; }
+.setup-guide-content code { background: #222; padding: 2px 5px; color: #ffaa00; }
+
+.updates-container {
+text-align: left;
+background: rgba(0,0,0,0.4);
+padding: 15px;
+border: 2px solid #404040;
+margin-top: 20px;
+font-size: 16px;
+max-height: 400px;
+overflow-y: auto;
+}
+
+.changelog-entry {
+margin-bottom: 20px;
+border-bottom: 1px solid #555;
+padding-bottom: 10px;
+}
+
+.version-tag { color: #55ffff; }
+
+.disclaimer-box {
+background-color: rgba(255, 255, 85, 0.1);
+border: 1px solid #ffff55;
+padding: 15px;
+font-size: 14px;
+margin-bottom: 25px;
+color: #ffffaa;
+text-align: center;
+}
+
+.blackscreenoverlay {
+display: none;
+position: fixed;
+top: 0; left: 0;
+width: 100%; height: 100%;
+background-color: rgba(0, 0, 0, 0.85);
+z-index: 200;
+justify-content: center;
+align-items: center;
+font-family: 'Mojangles', sans-serif;
+color: #ffffff;
+text-shadow: 2px 2px 0px #000000;
+}
+
+.settingsmenuwindow {
+background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/stone.jpg');
+background-repeat: repeat;
+background-size: 128px;
+image-rendering: pixelated;
+border: 2px solid #000000;
+box-shadow: inset 2px 2px 0px #707070, inset -2px -2px 0px #303030, 0px 15px 35px rgba(0,0,0,0.8);
+width: 450px;
+padding: 25px;
+}
+
+.mcinputbox {
+width: 100%;
+background-color: #000000;
+border: 2px solid #a0a0a0;
+box-shadow: inset 2px 2px 0px #303030, inset -2px -2px 0px #ffffff;
+color: #ffffff;
+font-family: 'Mojangles', sans-serif;
+font-size: 18px;
+padding: 10px;
+margin-bottom: 20px;
+text-shadow: 2px 2px 0px #000000;
+outline: none;
+}
+
+.screenshot-placeholder {
+width: 100%;
+max-width: 500px;
+border: 2px solid #ffffff;
+margin: 15px 0;
+display: block;
+}
+
+@media (max-width: 600px) {
+.dirtpanelbox { width: 95%; }
+.splash-text { right: 10px; font-size: 16px; }
+}
+/* TV Scanline Overlay */
+body::before {
+content: "";
+position: fixed;
+top: 0; left: 0; right: 0; bottom: 0;
+
+background:
+linear-gradient(
+rgba(18, 16, 16, 0) 50%,
+rgba(0, 0, 0, 0.1) 50%
+),
+linear-gradient(
+90deg,
+rgba(255, 0, 0, 0.03),
+rgba(0, 255, 0, 0.01),
+rgba(0, 0, 255, 0.03)
+);
+
+background-size: 100% 4px, 3px 100%;
+z-index: 9999;
+pointer-events: none;
+}
+</style>
 </head>
 <body>
 
-    <div class="darkenscreenlayer"></div>
+<div class="darkenscreenlayer"></div>
 
-    <div class="mainpagewrapper">
-        <div class="title-container">
-            <img src="images/186_MenuTitle.png" class="thebigcooltitlepic" alt="LCEMP title">
-            <div class="splash-text" id="randomSplash">Now with multiplayer!</div>
-        </div>
+<div class="mainpagewrapper">
+<div class="title-container">
+<img src="images/186_MenuTitle.png" class="thebigcooltitlepic" alt="LCEMP title">
+<div class="splash-text" id="randomSplash">Now with multiplayer!</div>
+</div>
 
-        <div class="dirtpanelbox">
-            <button class="gearbuttoninthecorner makeanoiseonhover" id="opengesettingsbutton">
-                <img src="images/settings.png" alt="Settings">
-            </button>
+<div class="dirtpanelbox">
+<button class="gearbuttoninthecorner makeanoiseonhover" id="opengesettingsbutton">
+<img src="images/settings.png" alt="Settings">
+</button>
 
-            <div class="disclaimer-box">
-                <b>Disclaimer:</b> I did not create LCEMP. Full credit goes to notpies and contributors (maybe) working on the project. 
-                I created this page out of boredom to make downloads, updates, and resources easier for my friends to find.
-            </div>
+<div class="disclaimer-box">
+<b>Disclaimer:</b> I did not create LCEMP. Full credit goes to notpies and contributors (maybe) working on the project.
+I created this page out of boredom to make downloads, updates, and resources easier for my friends to find.
+</div>
 
-            <div class="section-title">LCEMP Overview</div>
-            <div class="maindescriptiontext">
-                LCEMP is a fork of the <b>Minecraft Legacy Console Edition</b> source that enables LAN multiplayer hosting.
-            </div>
+<div class="section-title">LCEMP Overview</div>
+<div class="maindescriptiontext">
+LCEMP is a fork of the <b>Minecraft Legacy Console Edition</b> source that enables LAN multiplayer hosting.
+</div>
 
-            <div class="section-title">Features</div>
-            <ul class="feature-list">
-                <li>Fully working multiplayer (Breaking blocks, placing blocks)</li>
-                <li>Kick system (Up to 8 players, modifiable in source)</li>
-                <li>Keyboard and mouse support</li>
-                <li>Gamma fix & Fullscreen support</li>
-                <li>The source code is available on the GitHub repositories.</li>
-                <li>To play with others, it is recommended to use Hamachi or Radmin VPN.</li>
-            </ul>
+<div class="section-title">Features</div>
+<ul class="feature-list">
+<li>Fully working multiplayer (Breaking blocks, placing blocks)</li>
+<li>Kick system (Up to 8 players, modifiable in source)</li>
+<li>Keyboard and mouse support</li>
+<li>Gamma fix & Fullscreen support</li>
+<li>The source code is available on the GitHub repositories.</li>
+<li>To play with others, it is recommended to use Hamachi or Radmin VPN.</li>
+</ul>
 
-            <div class="redwarningtext">
-                "If you want to reuse the multiplayer code in another project, please give credit, as it took a long time to develop." - notpies
-            </div>
+<div class="redwarningtext">
+"If you want to reuse the multiplayer code in another project, please give credit, as it took a long time to develop." - notpies
+</div>
 
-            <a href="https://github.com/LCEMP/LCEMP-Server" class="mcstylebutton makeanoiseonhover" target="_blank">Dedicated Server Source (GitHub)</a>
-            <a href="https://github.com/LCEMP/LCEMP" class="mcstylebutton makeanoiseonhover" target="_blank">Client Source (GitHub)</a>
-            
-            <div class="version-selection-container">
-                <select id="versionSelect" class="mc-dropdown makeanoiseonhover">
-                    <option value="https://www.mediafire.com/file/pwvgxfh49amhk69/LCEMP_v1.0.4.zip/file">LCEMP 1.0.4 (Latest)</option>
-                    <option value="https://www.mediafire.com/file/wujwak4nsb6ln0r/LCEMP_v1.0.3.zip/file">LCEMP 1.0.3</option>
-                    <option value="https://www.mediafire.com/file/amnh5srbtzgxats/LCEMP_1.0.2.zip/file">LCEMP 1.0.2</option>
-                    <option value="https://www.mediafire.com/file/oe4wlaodw7v8k3a/LCEMP1.0.1.zip/file">LCEMP 1.0.1 (Broken Link)</option>
-                </select>
-                <a href="https://www.mediafire.com/file/pwvgxfh49amhk69/LCEMP_v1.0.4.zip/file" id="dynamicDownloadBtn" class="mcstylebutton makeanoiseonhover" target="_blank">Download Selected Version</a>
-            </div>
+<a href="https://github.com/LCEMP/LCEMP-Server" class="mcstylebutton makeanoiseonhover" target="_blank">Dedicated Server Source (GitHub)</a>
+<a href="https://github.com/LCEMP/LCEMP" class="mcstylebutton makeanoiseonhover" target="_blank">Client Source (GitHub)</a>
 
-            <a href="https://www.mediafire.com/file/7lt83l2djjqvarv/DLC.zip/file" class="mcstylebutton makeanoiseonhover" target="_blank" style="margin-top: 30px;">DLC's Download</a>
+<div class="version-selection-container">
+<select id="versionSelect" class="mc-dropdown makeanoiseonhover">
+<option value="https://s.stashr.wtf/YjocRy">LCEMP 1.0.4 (Latest)</option>
+<option value="https://s.stashr.wtf/7eDaav">LCEMP 1.0.3</option>
+<option value="https://s.stashr.wtf/2zZ2d5">LCEMP 1.0.2</option>
+<option value="https://www.mediafire.com/file/oe4wlaodw7v8k3a/LCEMP1.0.1.zip/file">LCEMP 1.0.1 (Broken Link)</option>
+</select>
+<a href="https://s.stashr.wtf/YjocRy" id="dynamicDownloadBtn" class="mcstylebutton makeanoiseonhover" target="_blank">Download Selected Version</a>
+</div>
 
-            <div class="section-title">Setup Guide</div>
-            <div class="setup-guide-content">
-                <h3>Requirements</h3>
-                <ul>
-                    <li>Download <a href="https://www.radmin-vpn.com/" target="_blank" style="color:#55ffff;">Radmin VPN</a></li>
-                    <li>Ensure your firewall is configured correctly so the game can communicate over the network.</li>
-                </ul>
+<a href="https://s.stashr.wtf/rJOu75" class="mcstylebutton makeanoiseonhover" target="_blank" style="margin-top: 30px;">DLC's Download</a>
 
-                <h3>Singleplayer</h3>
-                <p>To play singleplayer, simply launch the LCEMP executable (<code>Minecraft.Client.exe</code>).</p>
+<div class="section-title">Setup Guide</div>
+<div class="setup-guide-content">
+<h3>Requirements</h3>
+<ul>
+<li>Download <a href="https://www.radmin-vpn.com/" target="_blank" style="color:#55ffff;">Radmin VPN</a></li>
+<li>Ensure your firewall is configured correctly so the game can communicate over the network.</li>
+</ul>
 
-                <h3>Multiplayer Setup</h3>
-                <ol>
-                    <li>All players must download and install Radmin VPN.</li>
-                    <li>Create or join a Radmin network with the players you want to play with.</li>
-                    <li>The host should open the world they want to play.</li>
-                    <li>Other players can join using the host's Radmin IPv4 address.</li>
-                </ol>
+<h3>Singleplayer</h3>
+<p>To play singleplayer, simply launch the LCEMP executable (<code>Minecraft.Client.exe</code>).</p>
 
-                <h3>DLC Installation Steps</h3>
-                <ol>
-                    <li>Download the DLCs provided above.</li>
-                    <li>After downloading, open the .zip file. You should see several folders inside.</li>
-                    <li>Press Ctrl + A to select all folders, then press Ctrl + C to copy them.</li>
-                    <li>Open the root directory of your LCEMP installation (the folder where <code>Minecraft.Client.exe</code> is located).</li>
-                    <li>Navigate to: <code>\Windows64Media\DLC</code>.</li>
-                    <li>Inside the DLC folder, press Ctrl + A and delete the existing folders/files.</li>
-                    <li>Press Ctrl + V to paste the folders you copied from the .zip.</li>
-                    <li>Once the folders are pasted into the DLC directory, launch <code>Minecraft.Client.exe</code>.</li>
-                    <li>The DLCs should now be installed.</li>
-                </ol>
+<h3>Multiplayer Setup</h3>
+<ol>
+<li>All players must download and install Radmin VPN.</li>
+<li>Create or join a Radmin network with the players you want to play with.</li>
+<li>The host should open the world they want to play.</li>
+<li>Other players can join using the host's Radmin IPv4 address.</li>
+</ol>
 
-                <h3>Joining a Multiplayer Server</h3>
-                <p>Launch the game with the IP launch argument:</p>
-                <code>-ip 123.123.123.123</code>
-                <p>Replace the IP with the host's Radmin IPv4 address.</p>
+<h3>DLC Installation Steps</h3>
+<ol>
+<li>Download the DLCs provided above.</li>
+<li>After downloading, open the .zip file. You should see several folders inside.</li>
+<li>Press Ctrl + A to select all folders, then press Ctrl + C to copy them.</li>
+<li>Open the root directory of your LCEMP installation (the folder where <code>Minecraft.Client.exe</code> is located).</li>
+<li>Navigate to: <code>\Windows64Media\DLC</code>.</li>
+<li>Inside the DLC folder, press Ctrl + A and delete the existing folders/files.</li>
+<li>Press Ctrl + V to paste the folders you copied from the .zip.</li>
+<li>Once the folders are pasted into the DLC directory, launch <code>Minecraft.Client.exe</code>.</li>
+<li>The DLCs should now be installed.</li>
+</ol>
 
-                <h3>Setting Your Username</h3>
-                <p>You can set your in-game username using the <code>-name</code> launch argument.</p>
-                <p>Example: <code>-name Simon</code></p>
-                <p>If you do not specify a name, the game will use your computer's username automatically.</p>
+<h3>Joining a Multiplayer Server</h3>
+<p>Launch the game with the IP launch argument:</p>
+<code>-ip 123.123.123.123</code>
+<p>Replace the IP with the host's Radmin IPv4 address.</p>
 
-                <h3>How to Use Launch Arguments (Windows)</h3>
-                <ol>
-                    <li>Right-click the <code>Minecraft.Client.exe</code></li>
-                    <li>Click <b>Create Shortcut</b></li>
-                    <li>Right-click the shortcut and open <b>Properties</b></li>
-                    <li>Add the launch arguments at the end of the <b>Target</b> field</li>
-                </ol>
-                <p>Example: <code>Minecraft.Client.exe -name Simon -ip 123.123.123.123</code></p>
-                <img src="images/Screenshot.png" alt="How to add launch arguments" class="screenshot-placeholder">
-            </div>
+<h3>Setting Your Username</h3>
+<p>You can set your in-game username using the <code>-name</code> launch argument.</p>
+<p>Example: <code>-name Simon</code></p>
+<p>If you do not specify a name, the game will use your computer's username automatically.</p>
 
-            <div class="section-title">Changelogs</div>
-            <div class="updates-container">
-                <div class="changelog-entry">
-                    <b class="version-tag">LCEMP 1.0.4</b>
-                    <ul>
-                        <li>huge net code improvements</li>
-                        <li>keybinds are now configurable (a file should be created on root game folder)</li>
-                        <li>voice chat support (dedicated server only, you can configure on the keybinds ini if using active mode or push to talk along with its keybind, it uses the default microphone)</li>
-                        <li>major chunk generation fixes</li>
-                        <li>performance improvements</li>
-                        <li>dedicated server packet validation (prevents craft anything, debug menu cheats on dedicated servers)</li>
-                        <li>misc bug fixes</li>
-                    </ul>
-                    <a href="https://www.mediafire.com/file/pwvgxfh49amhk69/LCEMP_v1.0.4.zip/file" style="color: #55ff55;">Download 1.0.4</a>
-                </div>
+<h3>How to Use Launch Arguments (Windows)</h3>
+<ol>
+<li>Right-click the <code>Minecraft.Client.exe</code></li>
+<li>Click <b>Create Shortcut</b></li>
+<li>Right-click the shortcut and open <b>Properties</b></li>
+<li>Add the launch arguments at the end of the <b>Target</b> field</li>
+</ol>
+<p>Example: <code>Minecraft.Client.exe -name Simon -ip 123.123.123.123</code></p>
+<img src="images/Screenshot.png" alt="How to add launch arguments" class="screenshot-placeholder">
+</div>
 
-                <div class="changelog-entry">
-                    <b class="version-tag">LCEMP 1.0.3</b>
-                    <ul>
-                        <li>initial splitscreen support</li>
-                        <li>exit game works correctly</li>
-                        <li>persistent multiplayer data saving</li>
-                        <li>fixed DLC crashing</li>
-                        <li>improved performance</li>
-                        <li>fixed chunk updates</li>
-                        <li>increased multiplayer render distance</li>
-                        <li>improved net code</li>
-                        <li>removed Herobrine</li>
-                    </ul>
-                    <p style="font-size: 14px; color: #ff5555;"><b>Important:</b> A major RCE exploit was fixed. Update immediately. Store inventory in chests before updating as player data format changed. End dimension is still WIP.</p>
-                    <a href="https://www.mediafire.com/file/wujwak4nsb6ln0r/LCEMP_v1.0.3.zip/file" style="color: #55ff55;">Download 1.0.3</a>
-                </div>
+<div class="section-title">Changelogs</div>
+<div class="updates-container">
+<div class="changelog-entry">
+<b class="version-tag">LCEMP 1.0.4</b>
+<ul>
+<li>huge net code improvements</li>
+<li>keybinds are now configurable (a file should be created on root game folder)</li>
+<li>voice chat support (dedicated server only, you can configure on the keybinds ini if using active mode or push to talk along with its keybind, it uses the default microphone)</li>
+<li>major chunk generation fixes</li>
+<li>performance improvements</li>
+<li>dedicated server packet validation (prevents craft anything, debug menu cheats on dedicated servers)</li>
+<li>misc bug fixes</li>
+</ul>
+<a href="https://s.stashr.wtf/YjocRy" style="color: #55ff55;">Download 1.0.4</a>
+</div>
 
-                <div class="changelog-entry">
-                    <b class="version-tag">LCEMP 1.0.2</b>
-                    <ul>
-                        <li>world saving reimplemented</li>
-                        <li>improved net code</li>
-                        <li>fixes advertiser player list</li>
-                        <li>fixes 2 player issue</li>
-                        <li>chunk update fixes</li>
-                        <li>proper gamma fix</li>
-                        <li>improved keyboard and mouse input</li>
-                        <li>settings saving</li>
-                        <li>FOV and fullscreen settings</li>
-                    </ul>
-                    <a href="https://www.mediafire.com/file/amnh5srbtzgxats/LCEMP_1.0.2.zip/file" style="color: #55ff55;">Download 1.0.2</a>
-                </div>
+<div class="changelog-entry">
+<b class="version-tag">LCEMP 1.0.3</b>
+<ul>
+<li>initial splitscreen support</li>
+<li>exit game works correctly</li>
+<li>persistent multiplayer data saving</li>
+<li>fixed DLC crashing</li>
+<li>improved performance</li>
+<li>fixed chunk updates</li>
+<li>increased multiplayer render distance</li>
+<li>improved net code</li>
+<li>removed Herobrine</li>
+</ul>
+<p style="font-size: 14px; color: #ff5555;"><b>Important:</b> A major RCE exploit was fixed. Update immediately. Store inventory in chests before updating as player data format changed. End dimension is still WIP.</p>
+<a href="https://s.stashr.wtf/7eDaav" style="color: #55ff55;">Download 1.0.3</a>
+</div>
 
-                <div class="changelog-entry">
-                    <b class="version-tag">LCEMP 1.0.1</b>
-                    <ul>
-                        <li>Initial public multiplayer build</li>
-                        <li>Up to 8 players</li>
-                        <li>Username system (duplicate usernames cannot join)</li>
-                    </ul>
-                    <a href="https://www.mediafire.com/file/oe4wlaodw7v8k3a/LCEMP1.0.1.zip/file" style="color: #55ff55;">Download 1.0.1</a>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="changelog-entry">
+<b class="version-tag">LCEMP 1.0.2</b>
+<ul>
+<li>world saving reimplemented</li>
+<li>improved net code</li>
+<li>fixes advertiser player list</li>
+<li>fixes 2 player issue</li>
+<li>chunk update fixes</li>
+<li>proper gamma fix</li>
+<li>improved keyboard and mouse input</li>
+<li>settings saving</li>
+<li>FOV and fullscreen settings</li>
+</ul>
+<a href="https://s.stashr.wtf/2zZ2d5" style="color: #55ff55;">Download 1.0.2</a>
+</div>
 
-    <div class="blackscreenoverlay" id="thebigsettingsmenu">
-        <div class="settingsmenuwindow">
-            <h2 style="text-align: center;">Tab Configuration</h2>
-            <label style="color:#aaa">Tab Name</label>
-            <input type="text" class="mcinputbox" id="thetextboxtypethingy" placeholder="LCEMP - Indev">
-            <label style="color:#aaa">Favicon URL</label>
-            <input type="text" class="mcinputbox" id="thepicturelinkbox" placeholder="https://...">
-            <button class="mcstylebutton makeanoiseonhover" id="savethedatabutton">Done</button>
-            <button class="mcstylebutton makeanoiseonhover" id="nvmcloseitbutton">Cancel</button>
-        </div>
-    </div>
+<div class="changelog-entry">
+<b class="version-tag">LCEMP 1.0.1</b>
+<ul>
+<li>Initial public multiplayer build</li>
+<li>Up to 8 players</li>
+<li>Username system (duplicate usernames cannot join)</li>
+</ul>
+<a href="https://www.mediafire.com/file/oe4wlaodw7v8k3a/LCEMP1.0.1.zip/file" style="color: #55ff55;">Download 1.0.1</a>
+</div>
+</div>
+</div>
+</div>
 
-    <script>
-        /* Splash Text Logic */
-        const splashTexts = [
-            "Now with multiplayer!", "Not affiliated with Mojang!", "100% more LAN!", "https://discord.gg/lcemp",
-            "Also try Console Edition!", "Check the changelogs!", "Removed Herobrine!", "Made with love! <3",
-            "Splitscreen is coming!", "Works on my machine!", "Probably bug free!", "Definitely not spaghetti code!",
-            "Try pressing Alt+F4!", "LAN party ready!", "Up to 8 friends!", "Or 0 if nobody joins :(",
-            "Keyboard AND mouse!", "Blocks were harmed in the making!", "Certified gamer software!",
-            "Now 12% more stable!", "Do not eat the source code!", "Trust me bro it works!",
-            "Runs better than expected!", "Netcode moment!", "Hello world!", "Compiles sometimes!",
-            "Press buttons responsibly!", "Friendship simulator!", "Touch grass later!", "Works with Radmin!",
-            "Hamachi survivors welcome!", "Bug? what bug?", "Feature, not bug!", "Probably fine!",
-            "Send help!", "Why are you reading this?", "Open source soon™", "End dimension soon™",
-            "Splitscreen enjoyers rise!", "Retro vibes!", "Console edition forever!", "Legacy lives on!",
-            "LAN > internet", "Low ping gaming!", "Made out of boredom!", "Built different!",
-            "Powered by C++!", "Works better than expected!", "Your PC can handle it!", "Try breaking a block!",
-            "Place responsibly!", "Don't grief the host!", "Kick system included!", "Bring snacks!",
-            "Friends recommended!", "Multiplayer chaos!", "Classic Minecraft vibes!", "Cube game enjoyer!",
-            "Stone texture supremacy!", "Blocky but beautiful!", "Runs on hope!", "Probably secure!",
-            "No microtransactions!", "Free as in free!", "Pixel perfection!", "Trust the process!",
-            "Debugging is fun!", "Just one more block!", "Just one more update!", "Almost finished!",
-            "Totally stable build!", "Netcode wizardry!", "LAN magic!", "Open the settings!",
-            "Customize your tab!", "Now with extra pixels!", "Retro gaming energy!", "Made for the homies!",
-            "LCEMP gang!", ":3", "<3", "Probably won't get a DMCA!"
-        ];
-        const splashElement = document.getElementById('randomSplash');
+<div class="blackscreenoverlay" id="thebigsettingsmenu">
+<div class="settingsmenuwindow">
+<h2 style="text-align: center;">Tab Configuration</h2>
+<label style="color:#aaa">Tab Name</label>
+<input type="text" class="mcinputbox" id="thetextboxtypethingy" placeholder="LCEMP - Indev">
+<label style="color:#aaa">Favicon URL</label>
+<input type="text" class="mcinputbox" id="thepicturelinkbox" placeholder="https://...">
+<button class="mcstylebutton makeanoiseonhover" id="savethedatabutton">Done</button>
+<button class="mcstylebutton makeanoiseonhover" id="nvmcloseitbutton">Cancel</button>
+</div>
+</div>
+
+<script>
+/* Splash Text Logic */
+const splashTexts = [
+"Now with multiplayer!", "Not affiliated with Mojang!", "100% more LAN!", "https://discord.gg/lcemp",
+"Also try Console Edition!", "Check the changelogs!", "Removed Herobrine!", "Made with love! <3",
+"Splitscreen is coming!", "Works on my machine!", "Probably bug free!", "Definitely not spaghetti code!",
+"Try pressing Alt+F4!", "LAN party ready!", "Up to 8 friends!", "Or 0 if nobody joins :(",
+"Keyboard AND mouse!", "Blocks were harmed in the making!", "Certified gamer software!",
+"Now 12% more stable!", "Do not eat the source code!", "Trust me bro it works!",
+"Runs better than expected!", "Netcode moment!", "Hello world!", "Compiles sometimes!",
+"Press buttons responsibly!", "Friendship simulator!", "Touch grass later!", "Works with Radmin!",
+"Hamachi survivors welcome!", "Bug? what bug?", "Feature, not bug!", "Probably fine!",
+"Send help!", "Why are you reading this?", "Open source soon™", "End dimension soon™",
+"Splitscreen enjoyers rise!", "Retro vibes!", "Console edition forever!", "Legacy lives on!",
+"LAN > internet", "Low ping gaming!", "Made out of boredom!", "Built different!",
+"Powered by C++!", "Works better than expected!", "Your PC can handle it!", "Try breaking a block!",
+"Place responsibly!", "Don't grief the host!", "Kick system included!", "Bring snacks!",
+"Friends recommended!", "Multiplayer chaos!", "Classic Minecraft vibes!", "Cube game enjoyer!",
+"Stone texture supremacy!", "Blocky but beautiful!", "Runs on hope!", "Probably secure!",
+"No microtransactions!", "Free as in free!", "Pixel perfection!", "Trust the process!",
+"Debugging is fun!", "Just one more block!", "Just one more update!", "Almost finished!",
+"Totally stable build!", "Netcode wizardry!", "LAN magic!", "Open the settings!",
+"Customize your tab!", "Now with extra pixels!", "Retro gaming energy!", "Made for the homies!",
+"LCEMP gang!", ":3", "<3", "Probably won't get a DMCA!"
+];
+const splashElement = document.getElementById('randomSplash');
 
 let currentText = "";
 let isAnimating = false;
 
 function getRandomSplash() {
-    return splashTexts[Math.floor(Math.random() * splashTexts.length)];
+return splashTexts[Math.floor(Math.random() * splashTexts.length)];
 }
 
 function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function typeText(text) {
-    isAnimating = true;
-    splashElement.innerText = "";
-    currentText = "";
+isAnimating = true;
+splashElement.innerText = "";
+currentText = "";
 
-    for (let i = 0; i < text.length; i++) {
-        currentText += text[i];
-        splashElement.innerText = currentText;
-        await sleep(100);
-    }
+for (let i = 0; i < text.length; i++) {
+currentText += text[i];
+splashElement.innerText = currentText;
+await sleep(100);
+}
 }
 
 async function deleteText() {
-    for (let i = currentText.length; i > 0; i--) {
-        currentText = currentText.slice(0, -1);
-        splashElement.innerText = currentText;
-        await sleep(90); 
-    }
+for (let i = currentText.length; i > 0; i--) {
+currentText = currentText.slice(0, -1);
+splashElement.innerText = currentText;
+await sleep(90);
+}
 }
 
 async function splashLoop() {
-    while (true) {
-        const newText = getRandomSplash();
+while (true) {
+const newText = getRandomSplash();
 
-        await typeText(newText);
+await typeText(newText);
 
-        await sleep(10000); 
+await sleep(10000);
 
-        await deleteText();
+await deleteText();
 
-        await sleep(300); 
-    }
+await sleep(300);
+}
 }
 
 splashLoop();
 
-        /* Audio Assets */
-        const hoverysoundobj = new Audio('focus.ogg');
-        const clickysoundobj = new Audio('press.ogg');
-        const backysoundobj = new Audio('back.ogg');
-        const chestsoundobj = new Audio('music/chest.ogg');
+/* Audio Assets */
+const hoverysoundobj = new Audio('focus.ogg');
+const clickysoundobj = new Audio('press.ogg');
+const backysoundobj = new Audio('back.ogg');
+const chestsoundobj = new Audio('music/chest.ogg');
 
-        const bringupthesettingsbtn = document.getElementById('opengesettingsbutton');
-        const thatbigdarkscreen = document.getElementById('thebigsettingsmenu');
-        const savethatstuffbtn = document.getElementById('savethedatabutton');
-        const getmeoutofherebtn = document.getElementById('nvmcloseitbutton');
-        const tabnameboxelement = document.getElementById('thetextboxtypethingy');
-        const tabpicboxelement = document.getElementById('thepicturelinkbox');
-        const reallifeiconobj = document.getElementById('thetopbariconthingy');
+const bringupthesettingsbtn = document.getElementById('opengesettingsbutton');
+const thatbigdarkscreen = document.getElementById('thebigsettingsmenu');
+const savethatstuffbtn = document.getElementById('savethedatabutton');
+const getmeoutofherebtn = document.getElementById('nvmcloseitbutton');
+const tabnameboxelement = document.getElementById('thetextboxtypethingy');
+const tabpicboxelement = document.getElementById('thepicturelinkbox');
+const reallifeiconobj = document.getElementById('thetopbariconthingy');
 
-        /* Version Selection Logic */
-        const versionSelect = document.getElementById('versionSelect');
-        const dynamicDownloadBtn = document.getElementById('dynamicDownloadBtn');
+/* Version Selection Logic */
+const versionSelect = document.getElementById('versionSelect');
+const dynamicDownloadBtn = document.getElementById('dynamicDownloadBtn');
 
-        versionSelect.addEventListener('change', function() {
-            dynamicDownloadBtn.href = this.value;
-            clickysoundobj.play();
-        });
+versionSelect.addEventListener('change', function() {
+dynamicDownloadBtn.href = this.value;
+clickysoundobj.play();
+});
 
-        /* Music Logic */
-        const musicsongs = [
-            "music/calm1.ogg", "music/calm2.ogg", "music/calm3.ogg",
-            "music/menu1.ogg", "music/menu2.ogg", "music/menu3.ogg",
-            "music/menu4.ogg", "music/piano1.ogg", "music/piano2.ogg", "music/piano3.ogg",
-        ];
+/* Music Logic */
+const musicsongs = [
+"music/calm1.ogg", "music/calm2.ogg", "music/calm3.ogg",
+"music/menu1.ogg", "music/menu2.ogg", "music/menu3.ogg",
+"music/menu4.ogg", "music/piano1.ogg", "music/piano2.ogg", "music/piano3.ogg",
+];
 
-        const backgroundmusic = new Audio();
-        backgroundmusic.volume = 0.8;
+const backgroundmusic = new Audio();
+backgroundmusic.volume = 0.8;
 
-        function playrandomsong() {
-            const randomsong = musicsongs[Math.floor(Math.random() * musicsongs.length)];
-            backgroundmusic.src = randomsong;
-            backgroundmusic.play().catch(() => {});
-        }
+function playrandomsong() {
+const randomsong = musicsongs[Math.floor(Math.random() * musicsongs.length)];
+backgroundmusic.src = randomsong;
+backgroundmusic.play().catch(() => {});
+}
 
-        backgroundmusic.addEventListener("ended", playrandomsong);
-        document.addEventListener("click", () => {
-            if(!backgroundmusic.src) playrandomsong();
-        }, { once: true });
+backgroundmusic.addEventListener("ended", playrandomsong);
+document.addEventListener("click", () => {
+if(!backgroundmusic.src) playrandomsong();
+}, { once: true });
 
-        /* Global Link Click Sound */
-        document.addEventListener('click', (e) => {
-            const link = e.target.closest('a');
-            if (link) {
-                chestsoundobj.currentTime = 0;
-                chestsoundobj.play().catch(() => {});
-            }
-        });
+/* Global Link Click Sound */
+document.addEventListener('click', (e) => {
+const link = e.target.closest('a');
+if (link) {
+chestsoundobj.currentTime = 0;
+chestsoundobj.play().catch(() => {});
+}
+});
 
-        /* UI Event Listeners */
-        document.querySelectorAll('.makeanoiseonhover').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                hoverysoundobj.currentTime = 0;
-                hoverysoundobj.play().catch(() => {});
-            });
-        });
+/* UI Event Listeners */
+document.querySelectorAll('.makeanoiseonhover').forEach(el => {
+el.addEventListener('mouseenter', () => {
+hoverysoundobj.currentTime = 0;
+hoverysoundobj.play().catch(() => {});
+});
+});
 
-        bringupthesettingsbtn.onclick = () => {
-            clickysoundobj.play();
-            tabnameboxelement.value = document.title;
-            tabpicboxelement.value = reallifeiconobj.href;
-            thatbigdarkscreen.style.display = 'flex';
-        };
+bringupthesettingsbtn.onclick = () => {
+clickysoundobj.play();
+tabnameboxelement.value = document.title;
+tabpicboxelement.value = reallifeiconobj.href;
+thatbigdarkscreen.style.display = 'flex';
+};
 
-        getmeoutofherebtn.onclick = () => {
-            backysoundobj.play();
-            thatbigdarkscreen.style.display = 'none';
-        };
+getmeoutofherebtn.onclick = () => {
+backysoundobj.play();
+thatbigdarkscreen.style.display = 'none';
+};
 
-        savethatstuffbtn.onclick = () => {
-            clickysoundobj.play();
-            if (tabnameboxelement.value.trim() !== "") document.title = tabnameboxelement.value;
-            if (tabpicboxelement.value.trim() !== "") reallifeiconobj.href = tabpicboxelement.value;
-            thatbigdarkscreen.style.display = 'none';
-        };
-    </script>
+savethatstuffbtn.onclick = () => {
+clickysoundobj.play();
+if (tabnameboxelement.value.trim() !== "") document.title = tabnameboxelement.value;
+if (tabpicboxelement.value.trim() !== "") reallifeiconobj.href = tabpicboxelement.value;
+thatbigdarkscreen.style.display = 'none';
+};
+</script>
 </body>
 </html>
