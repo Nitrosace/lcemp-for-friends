@@ -174,6 +174,30 @@ border: 2px dashed #ff5555;
 padding: 10px;
 }
 
+.dmca-box {
+background-color: rgba(255, 0, 0, 0.12);
+border: 2px solid #ff3333;
+box-shadow: inset 2px 2px 0px #ff6666, inset -2px -2px 0px #880000;
+padding: 18px 20px;
+margin: 20px 0;
+font-size: 15px;
+color: #ffaaaa;
+text-align: center;
+}
+
+.dmca-box b {
+color: #ff5555;
+font-size: 18px;
+display: block;
+margin-bottom: 8px;
+text-shadow: 2px 2px 0px #440000;
+}
+
+.dmca-box a {
+color: #ffdd55;
+text-decoration: underline;
+}
+
 .mcstylebutton {
 display: block;
 width: 100%;
@@ -196,6 +220,13 @@ background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMQAAAAPCAMA
 border-color: #BDC6FF #59639A #59639A #BDC6FF;
 color: #ffffa0;
 box-shadow: none;
+}
+
+.mcstylebutton.disabled-btn {
+opacity: 0.5;
+pointer-events: none;
+cursor: not-allowed !important;
+filter: grayscale(60%);
 }
 
 .version-selection-container {
@@ -349,6 +380,17 @@ pointer-events: none;
 I created this page out of boredom to make downloads, updates, and resources easier for my friends to find.
 </div>
 
+<!-- DMCA NOTICE -->
+<div class="dmca-box">
+  <b>⚠ GitHub Repository Unavailable — DMCA Takedown by Microsoft ⚠</b>
+  The LCEMP GitHub repositories have been taken down following a DMCA notice filed by Microsoft on May 14, 2026.
+  The source code links below are currently unavailable as a result.<br><br>
+  You can view the official public DMCA report here:<br>
+  <a href="https://github.com/github/dmca/blob/master/2026/05/2026-05-14-microsoft.md" target="_blank">
+    github.com/github/dmca — 2026-05-14-microsoft.md
+  </a>
+</div>
+
 <div class="section-title">LCEMP Overview</div>
 <div class="maindescriptiontext">
 LCEMP is a fork of the <b>Minecraft Legacy Console Edition</b> source that enables LAN multiplayer hosting.
@@ -368,12 +410,12 @@ LCEMP is a fork of the <b>Minecraft Legacy Console Edition</b> source that enabl
 "If you want to reuse the multiplayer code in another project, please give credit, as it took a long time to develop." - notpies
 </div>
 
-<a href="https://github.com/LCEMP/LCEMP-Server" class="mcstylebutton makeanoiseonhover" target="_blank">Dedicated Server Source (GitHub)</a>
-<a href="https://github.com/LCEMP/LCEMP" class="mcstylebutton makeanoiseonhover" target="_blank">Client Source (GitHub)</a>
+<a href="https://github.com/LCEMP/LCEMP-Server" class="mcstylebutton makeanoiseonhover disabled-btn" target="_blank">Dedicated Server Source (GitHub) — Unavailable (DMCA)</a>
+<a href="https://github.com/LCEMP/LCEMP" class="mcstylebutton makeanoiseonhover disabled-btn" target="_blank">Client Source (GitHub) — Unavailable (DMCA)</a>
 
 <div class="version-selection-container">
 <select id="versionSelect" class="mc-dropdown makeanoiseonhover">
-<option value="https://s.stashr.wtf/YjocRy">LCEMP 1.0.4 (Latest)</option>
+<option value="https://s.stashr.wtf/YjocRy">LCEMP 1.0.4 (Latest stable)</option>
 <option value="https://s.stashr.wtf/7eDaav">LCEMP 1.0.3</option>
 <option value="https://s.stashr.wtf/2zZ2d5">LCEMP 1.0.2</option>
 <option value="https://www.mediafire.com/file/oe4wlaodw7v8k3a/LCEMP1.0.1.zip/file">LCEMP 1.0.1 (Broken Link)</option>
@@ -438,6 +480,32 @@ LCEMP is a fork of the <b>Minecraft Legacy Console Edition</b> source that enabl
 
 <div class="section-title">Changelogs</div>
 <div class="updates-container">
+
+<div class="changelog-entry">
+<b class="version-tag">LCEMP v1.1.0 (TU14) - Latest</b>
+<ul>
+<li>Fixed World Saving Issues</li>
+<li>Added Local Leaderboard/Statistics support on Windows</li>
+<li>Major performance fixes</li>
+<li>Keybind file should work correctly now</li>
+<li>Added Chat (dedicated server only - requires server property to be set)</li>
+<li>Other major bug fixes</li>
+<li>Fixed Keybind delays and more</li>
+<li>Game should save when forcefully exiting, preventing world corruptions</li>
+<li>Renderer partially rewritten to use modern rendering code (better support for Nvidia overlays, etc.)</li>
+</ul>
+<b style="color:#55ffff;">Dedicated Server:</b>
+<ul>
+<li>Server is now multi-threaded - max players increased to 255</li>
+<li>Major performance boosts</li>
+<li>Advertiser and server now listen on the same port (no need to open 2 ports - also applies to LAN games)</li>
+<li>Bug fixes</li>
+</ul>
+<p style="font-size:14px;color:#aaaaaa;">Supports both Native Linux and Windows dedicated server.</p>
+<a href="https://github.com/LCEMP/LCEMP/actions/runs/24949116931" target="_blank" style="color: #55ff55;">Download v1.1.0 (GitHub Actions — may expire)</a>
+<p style="font-size:13px;color:#ff5555;">Note: GitHub repositories are currently unavailable due to DMCA takedown. This link may not work.</p>
+</div>
+
 <div class="changelog-entry">
 <b class="version-tag">LCEMP 1.0.4</b>
 <ul>
